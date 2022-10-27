@@ -1,0 +1,44 @@
+* Notes
+<2022-10-26 Wed 18:56>: I created the related migration with the following 'rails g migration' command:
+#+begin_src bash
+samuelbanya@Samuels-MBP ~/hub/Development/code/phase-4/phase-4-active-record-associations-review-lab $ rails g migration add_taxi_and_passenger_to_ride --no-test-framework
+Resolving dependencies...
+      invoke  active_record
+      create    db/migrate/20221026235650_add_taxi_and_passenger_to_ride.rb
+#+end_src
+
+I then adjusted the 'db/migrate/20221026235650_add_taxi_and_passenger_to_ride.rb' migration file with the following revisions:
+#+begin_src ruby
+class AddTaxiAndPassengerToRide < ActiveRecord::Migration[6.1]
+  def change
+    add_column :rides, :taxi_id, :integer
+    add_column :rides, :passenger_id, :integer
+  end
+end
+#+end_src
+
+I then modified the 'app/models/passenger.rb' Passenger model with the following revisions:
+#+begin_src ruby
+class Passenger < ApplicationRecord
+    has_many :rides
+    has_many :taxis, through: :rides
+end
+#+end_src
+
+I then modified the 'app/models/ride.rb' Ride model with the following revisions:
+#+begin_src ruby
+class Ride < ApplicationRecord
+    belongs_to :taxi
+    belongs_to :passenger
+end
+#+end_src
+
+I then modified the 'app/models/taxi.rb' Taxi model with the following revisions:
+#+begin_src ruby
+class Taxi < ApplicationRecord
+    has_many :rides
+    has_many :passengers, through: :rides
+end
+#+end_src
+
+I then ran the 'rails db:migrate' command to ensure the migrations were successful.
